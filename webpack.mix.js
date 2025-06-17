@@ -9,4 +9,4 @@ mix
   .vue({ version: 3 })
   .postCss('resources/css/tool.css', 'css')
   .tailwind()
-  .nova('digital-creative/icon-action-toolbar')
+  .nova('mlsolutions/icon-action-toolbar')

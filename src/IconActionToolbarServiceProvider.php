@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace DigitalCreative\IconActionToolbar;
+namespace MlSolutions\IconActionToolbar;
 
 use Illuminate\Support\ServiceProvider;
 use Laravel\Nova\Actions\Action;

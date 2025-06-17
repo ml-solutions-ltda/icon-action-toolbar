@@ -1,5 +1,5 @@
 {
-    "name": "digital-creative/icon-action-toolbar",
+    "name": "mlsolutions/icon-action-toolbar",
     "description": "Allows you to update a single column of a resource all at once.",
     "keywords": [
         "laravel",
@@ -14,19 +14,19 @@
     ],
     "license": "MIT",
     "require": {
-        "php": ">=8.1",
-        "laravel/nova": "^4.28.0",
+        "php": ">=8.3",
+        "laravel/nova": "^4.28.0|^5.0",
         "nova-kit/nova-packages-tool": "^1.17"
     },
     "autoload": {
         "psr-4": {
-            "DigitalCreative\\IconActionToolbar\\": "src/"
+            "MlSolutions\\IconActionToolbar\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "DigitalCreative\\IconActionToolbar\\IconActionToolbarServiceProvider"
+                "MlSolutions\\IconActionToolbar\\IconActionToolbarServiceProvider"
             ]
         }
     },
