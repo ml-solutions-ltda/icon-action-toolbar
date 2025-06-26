@@ -157,6 +157,7 @@ const availableActions = computed(() => {
       })
 
     }
+    const page = usePage()
     console.log('instance', instance)
     console.log('page', page)
 
