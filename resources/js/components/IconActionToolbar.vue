@@ -50,19 +50,20 @@
     import { Icon, Button } from 'laravel-nova-ui'
     import { usePage } from '@inertiajs/inertia-vue3'
 
-    const page = usePage()
-
-    console.log(page)
-
-    if (page.value.component === 'Detail') {
-      console.log('Estamos na página de detalhes!')
-    }
     export default {
         components: { Icon, Button },
         emits: [ 'click' ],
         props: [ 'actions', 'standalone', 'parentType' ],
         computed: {
             isDetailView() {
+              const page = usePage()
+
+              console.log(page)
+
+              if (page.value.component === 'Detail') {
+                console.log('Estamos na página de detalhes!')
+              }
+
                 return Nova.$router.page.component === 'Nova.Detail'
                     && this.parentType === 'DetailActionDropdown.vue'
             },
