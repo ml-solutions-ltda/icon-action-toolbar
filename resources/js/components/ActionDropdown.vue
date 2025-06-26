@@ -40,6 +40,7 @@
     import { useLocalization } from '@/composables/useLocalization'
     import IconActionToolbar from './IconActionToolbar.vue'
     import { computed, getCurrentInstance } from 'vue'
+    import { usePage } from '@inertiajs/inertia-vue3'
 
     const emitter = defineEmits([ 'actionExecuted', 'show-preview' ])
 
@@ -158,7 +159,12 @@
             }
 
             if (resource.authorizedToDelete && !resource.softDeleted && Nova.$router.page.component !== 'Nova.Index') {
+              console.log('instance', instance)
+              console.log('page', page)
 
+              if (page.value.component === 'Detail') {
+                console.log('Estamos na página de detalhes!')
+              }
                 actions.push({
                     name: __('Delete Resource'),
                     uriKey: '__delete-resource-action__',
