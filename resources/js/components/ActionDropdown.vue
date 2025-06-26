@@ -157,14 +157,14 @@
                 })
 
             }
+          console.log('instance', instance)
+          console.log('page', page)
 
+          if (page.value.component === 'Detail') {
+            console.log('Estamos na página de detalhes!')
+          }
             if (resource.authorizedToDelete && !resource.softDeleted && Nova.$router.page.component !== 'Nova.Index') {
-              console.log('instance', instance)
-              console.log('page', page)
 
-              if (page.value.component === 'Detail') {
-                console.log('Estamos na página de detalhes!')
-              }
                 actions.push({
                     name: __('Delete Resource'),
                     uriKey: '__delete-resource-action__',
