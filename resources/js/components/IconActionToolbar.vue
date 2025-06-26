@@ -1,19 +1,19 @@
 <template>
 
-    <div :class="{ 'icon-action-toolbar-wrapper': standalone && isDetailView }">
+  <div :class="{ 'icon-action-toolbar-wrapper': standalone && isDetailView }">
 
-        <div v-if="actions.length > 0"
-             :class="{ 'rounded': standalone, 'rounded bg-gray-700/5 dark:bg-gray-950': !standalone }"
-             class="flex dark:focus:ring-gray-600 justify-evenly">
+    <div v-if="actions.length > 0"
+         :class="{ 'rounded': standalone, 'rounded bg-gray-700/5 dark:bg-gray-950': !standalone }"
+         class="flex dark:focus:ring-gray-600 justify-evenly">
 
-            <div v-for="{ iconActionToolbar, destructive, uriKey, name } of actions">
+      <div v-for="{ iconActionToolbar, destructive, uriKey, name } of actions">
 
-                <button
-                    v-tooltip="name"
-                    v-if="iconActionToolbar"
-                    type="button"
-                    @click.stop="() => $emit('click', uriKey)"
-                    :class="{
+        <button
+            v-tooltip="name"
+            v-if="iconActionToolbar"
+            type="button"
+            @click.stop="() => $emit('click', uriKey)"
+            :class="{
                         'dark:hover:[&:not(:disabled)]:text-primary-500 px-2': parentType === 'ActionSelector',
                         'w-auto': !isDetailView && !standalone,
                         'px-3 w-auto': !isDetailView && parentType === 'LoadingView.vue',
@@ -21,78 +21,76 @@
                         'hover:[&:not(:disabled)]:text-primary-500 dark:hover:[&:not(:disabled)]:text-primary-500 min-w-9': !destructive && !isDetailView,
                         'rounded hover:bg-gray-200 dark:hover:bg-gray-800 focus:outline-none focus:ring px-3 hover:text-gray-500': standalone && isDetailView,
                     }"
-                    class="inline-flex items-center justify-center toolbar-button h-9 dark:text-gray-400 text-gray-500 disabled:opacity-50 disabled:pointer-events-none">
+            class="inline-flex items-center justify-center toolbar-button h-9 dark:text-gray-400 text-gray-500 disabled:opacity-50 disabled:pointer-events-none">
 
-                    <Icon v-if="typeof iconActionToolbar.icon !== 'string'" name="cube-transparent"/>
+          <Icon v-if="typeof iconActionToolbar.icon !== 'string'" name="cube-transparent"/>
 
-                    <template v-else-if="iconActionToolbar.icon?.trim()?.startsWith('<svg')">
-                        <div v-html="iconActionToolbar.icon"/>
-                    </template>
+          <template v-else-if="iconActionToolbar.icon?.trim()?.startsWith('<svg')">
+            <div v-html="iconActionToolbar.icon"/>
+          </template>
 
-                    <Icon v-else-if="iconActionToolbar.icon" :name="iconActionToolbar.icon"/>
+          <Icon v-else-if="iconActionToolbar.icon" :name="iconActionToolbar.icon"/>
 
-                    <div class="ml-1 mr-1 whitespace-nowrap" v-if="iconActionToolbar.label">
-                        {{ iconActionToolbar.label }}
-                    </div>
+          <div class="ml-1 mr-1 whitespace-nowrap" v-if="iconActionToolbar.label">
+            {{ iconActionToolbar.label }}
+          </div>
 
-                </button>
+        </button>
 
-            </div>
-
-        </div>
+      </div>
 
     </div>
+
+  </div>
 
 </template>
 
 <script>
 
-    import { Icon, Button } from 'laravel-nova-ui'
-    import { usePage } from '@inertiajs/inertia-vue3'
+import { Icon, Button } from 'laravel-nova-ui'
+import {computed} from "vue";
 
-    export default {
-        components: { Icon, Button },
-        emits: [ 'click' ],
-        props: [ 'actions', 'standalone', 'parentType' ],
-        computed: {
-            isDetailView() {
-              const page = usePage()
+export default {
+  components: { Icon, Button },
+  emits: [ 'click' ],
+  props: [ 'actions', 'standalone', 'parentType' ],
+  computed: {
+    isDetailView() {
+      const isDetailPage = computed(() => {
+        const url = window.location.pathname
+        // Match both numeric IDs and UUID patterns at the end of the URL
+        // UUID pattern: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx (where x is hex)
+        return /\/resources\/[\w\-]+\/(\d+|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/i.test(url)
+      })
 
-              console.log(page)
-
-              if (page.value.component === 'Detail') {
-                console.log('Estamos na página de detalhes!')
-              }
-
-                return Nova.$router.page.component === 'Nova.Detail'
-                    && this.parentType === 'DetailActionDropdown.vue'
-            },
-        },
-    }
+      return isDetailPage.value && this.parentType === 'DetailActionDropdown.vue'
+    },
+  },
+}
 
 </script>
 
 <style lang="scss">
 
-    .icon-action-toolbar-wrapper {
-        width: calc(100% - 48px);
-        overflow-x: auto;
-    }
+.icon-action-toolbar-wrapper {
+  width: calc(100% - 48px);
+  overflow-x: auto;
+}
 
-    div[dusk$="detail-component"] div.icon-action-toolbar {
-        @apply mx-0;
-    }
+div[dusk$="detail-component"] div.icon-action-toolbar {
+  @apply mx-0;
+}
 
-    table div.icon-action-toolbar .hover-element {
+table div.icon-action-toolbar .hover-element {
 
-        &:hover {
-            @apply bg-transparent #{!important};
-        }
+  &:hover {
+    @apply bg-transparent #{!important};
+  }
 
-        button > div {
-            @apply px-3;
-        }
+  button > div {
+    @apply px-3;
+  }
 
-    }
+}
 
 </style>

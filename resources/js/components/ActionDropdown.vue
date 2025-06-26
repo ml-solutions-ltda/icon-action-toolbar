@@ -40,7 +40,6 @@ import {useActions} from '@/composables/useActions'
 import {useLocalization} from '@/composables/useLocalization'
 import IconActionToolbar from './IconActionToolbar.vue'
 import {computed, getCurrentInstance} from 'vue'
-import {usePage} from '@inertiajs/inertia-vue3'
 
 const emitter = defineEmits(['actionExecuted', 'show-preview'])
 
@@ -60,7 +59,6 @@ const {
   errors,
   actionModalVisible,
   responseModalVisible,
-  openConfirmationModal,
   closeConfirmationModal,
   closeResponseModal,
   handleActionClick,
@@ -77,19 +75,13 @@ const runAction = () => executeAction(() => emitter('actionExecuted'))
 const parentType = instance.parent.vnode.type.__file
 
 const onClick = event => {
-
   const action = availableActions.value.find(element => element.uriKey === event)
 
   if (typeof action.onClick === 'function') {
-
     action.onClick()
-
   } else {
-
     handleActionClick(event)
-
   }
-
 }
 
 const handleResponseModalConfirm = () => {
@@ -127,10 +119,8 @@ const availableActions = computed(() => {
           }).replace(Nova.config('base'), '')
 
           Nova.visit(url)
-
         },
       })
-
     }
 
     if (resource.authorizedToView && resource.previewHasFields) {
@@ -141,7 +131,6 @@ const availableActions = computed(() => {
         iconActionToolbar: {icon: config.icons.preview},
         onClick: () => instance.parent.emit('show-preview'),
       })
-
     }
 
     if (currentUser.canImpersonate && resource.authorizedToImpersonate) {
@@ -155,30 +144,36 @@ const availableActions = computed(() => {
           resourceId: resource.id.value,
         }),
       })
-
     }
-    const page = usePage()
-    console.log('instance', instance)
-    console.log('page', page)
 
-    if (page.value.component === 'Detail') {
-      console.log('Estamos na página de detalhes!')
-    }
-    if (resource.authorizedToDelete && !resource.softDeleted && Nova.$router.page.component !== 'Nova.Index') {
+    const isIndexPage = computed(() => {
+      const url = window.location.pathname
+      // Index pages typically end with the resource name
+      return /\/resources\/[\w\-]+$/.test(url)
+    })
 
+    const isDetailPage = computed(() => {
+      const url = window.location.pathname
+      // Match both numeric IDs and UUID patterns at the end of the URL
+      // UUID pattern: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx (where x is hex)
+      return /\/resources\/[\w\-]+\/(\d+|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/i.test(url)
+    })
+
+    if (resource.authorizedToDelete
+        && !resource.softDeleted
+        && isDetailPage.value
+        && props.selectedResources.length === 1
+        && (props.selectedResources[0] === props.viaResourceId || props.viaResourceId === undefined)) {
       actions.push({
         name: __('Delete Resource'),
         uriKey: '__delete-resource-action__',
         iconActionToolbar: {icon: config.icons.delete_resource},
         onClick: () => instance.parent.ctx.openDeleteModal(),
       })
-
     }
-
   }
 
   return actions
-
 })
 
 </script>
