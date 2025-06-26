@@ -48,7 +48,15 @@
 <script>
 
     import { Icon, Button } from 'laravel-nova-ui'
+    import { usePage } from '@inertiajs/inertia-vue3'
 
+    const page = usePage()
+
+    console.log(page)
+
+    if (page.value.component === 'Detail') {
+      console.log('Estamos na página de detalhes!')
+    }
     export default {
         components: { Icon, Button },
         emits: [ 'click' ],
